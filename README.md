@@ -3,7 +3,7 @@
 A full-stack scheduling/booking web application replicating Calendly's core UX. Built as part of an SDE Intern Fullstack Assignment.
 
 **Live Demo:** https://schedulr-demo.vercel.app *(deploy URL after deployment)*  
-**GitHub:** https://github.com/your-username/schedulr
+**GitHub:** https://github.com/Gatik8205/calendly_clone
 
 ---
 
