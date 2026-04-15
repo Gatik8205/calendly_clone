@@ -1,0 +1,83 @@
+// This is your Prisma schema file
+// Learn more at https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Event Types ────────────────────────────────────────────────────────────
+// Represents the types of meetings the host offers (e.g. "30 Min Call")
+model EventType {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique               // URL-friendly identifier: /book/:slug
+  duration    Int                            // Duration in minutes (15, 30, 60, etc.)
+  description String?
+  color       String   @default("#006BFF")   // Card accent color
+  location    String?                        // e.g. "Zoom", "Google Meet", "Phone"
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  bookings Booking[]
+}
+
+// ─── Availability Schedule ───────────────────────────────────────────────────
+// A named schedule (e.g. "Working Hours") that groups per-day availability.
+// Supports multiple schedules (bonus feature).
+model AvailabilitySchedule {
+  id        String   @id @default(cuid())
+  name      String   @default("Working Hours")
+  timezone  String   @default("Asia/Kolkata") // IANA timezone string
+  isDefault Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  days AvailabilityDay[]
+}
+
+// ─── Availability Day ────────────────────────────────────────────────────────
+// Per-day availability configuration within a schedule.
+// dayOfWeek: 0=Sunday, 1=Monday, ..., 6=Saturday (ISO convention)
+model AvailabilityDay {
+  id         String               @id @default(cuid())
+  dayOfWeek  Int                  // 0–6 (Sun–Sat)
+  startTime  String               // "09:00" (24-hr format)
+  endTime    String               // "17:00" (24-hr format)
+  isActive   Boolean              @default(true)
+  scheduleId String
+  schedule   AvailabilitySchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+
+  @@unique([scheduleId, dayOfWeek])
+}
+
+// ─── Booking ─────────────────────────────────────────────────────────────────
+// An actual booked meeting created by an invitee via the public booking page.
+model Booking {
+  id           String    @id @default(cuid())
+  eventTypeId  String
+  eventType    EventType @relation(fields: [eventTypeId], references: [id])
+  inviteeName  String
+  inviteeEmail String
+  startTime    DateTime                         // UTC datetime
+  endTime      DateTime                         // UTC datetime
+  status       BookingStatus @default(confirmed)
+  notes        String?                          // Optional message from invitee
+  cancelReason String?                          // Reason if cancelled
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([eventTypeId])
+  @@index([startTime])
+  @@index([status])
+}
+
+enum BookingStatus {
+  confirmed
+  cancelled
+}

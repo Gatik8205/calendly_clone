@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    @apply font-sans bg-gray-50 text-gray-900 antialiased;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-200 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-300;
+  }
+}
+
+@layer components {
+  /* Color swatch dots used on event type cards */
+  .color-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.15s, border-color 0.15s;
+  }
+  .color-dot:hover {
+    transform: scale(1.15);
+  }
+  .color-dot.selected {
+    border-color: #1f2937;
+    transform: scale(1.15);
+  }
+
+  /* Time slot buttons on booking page */
+  .time-slot-btn {
+    @apply w-full py-3 px-4 text-sm font-medium border-2 rounded-xl transition-all duration-150 cursor-pointer;
+    @apply border-primary-500 text-primary-600 bg-white hover:bg-primary-50;
+  }
+  .time-slot-btn.selected {
+    @apply bg-primary-500 text-white border-primary-500;
+  }
+
+  /* Calendar day cells */
+  .cal-day {
+    @apply w-9 h-9 flex items-center justify-center text-sm rounded-full cursor-pointer transition-all duration-100;
+  }
+  .cal-day.available {
+    @apply text-gray-800 font-medium hover:bg-primary-100;
+  }
+  .cal-day.selected {
+    @apply bg-primary-500 text-white font-semibold;
+  }
+  .cal-day.disabled {
+    @apply text-gray-300 cursor-not-allowed;
+  }
+  .cal-day.today {
+    @apply font-bold;
+  }
+}
