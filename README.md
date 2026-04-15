@@ -156,7 +156,7 @@ npm run install:all  # installs server + client deps
 ### 2. Configure environment
 
 ```bash
-cp server/.env.example server/.env
+cp server/.env server/.env
 ```
 
 Edit `server/.env`:
