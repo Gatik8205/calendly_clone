@@ -1,4 +1,4 @@
-# Schedulr — Calendly Clone
+# Calendly Clone
 
 A full-stack scheduling/booking web application replicating Calendly's core UX. Built as part of an SDE Intern Fullstack Assignment.
 
